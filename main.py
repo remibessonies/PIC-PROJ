@@ -7,7 +7,7 @@ from data_loading.funsd import train_dataloader,eval_dataloader
 import os
 import numpy as np
 import random
-from .traning.training import train
+from .traning.train import train
 from .traning.evaluate import evaluate
 
 import argparse
