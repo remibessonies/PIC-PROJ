@@ -82,10 +82,10 @@ def main():
     optimizer = AdamW(model.parameters(), lr=opts.lr)
 
     if opts.test_only:
-        evaluate(model=model, device=device, train_dataloader=train_dataloader, eval_dataloader=eval_dataloader)
+        evaluate(model=model, device=device, eval_dataloader=eval_dataloader,labels=labels)
         return
     else:
-        globel_step, loss = train(model=model, device=device, train_dataloader=train_dataloader, eval_dataloader=eval_dataloader,optimizer=optimizer, labels)
+        globel_step, loss = train(model=model, device=device, train_dataloader=train_dataloader, eval_dataloader=eval_dataloader,optimizer=optimizer, labels=labels)
         print('the globel step is {} and the loss is {}'.format(globel_step,loss))
         return
 
