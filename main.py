@@ -8,7 +8,7 @@ import os
 import numpy as np
 import random
 from .traning.train import train
-from .traning.evaluate import evaluate
+from .evaluation.evaluate import evaluate
 
 import argparse
 
