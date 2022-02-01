@@ -8,7 +8,7 @@ We put the results on google drive. You can download these result by using the f
 
 ## Training
 ~~~bash
-!python main.py --data_root './data_loading/funsd' \
+python main.py  --data_root './data_loading/funsd' \
                 --dataset 'funsd' \
                 --model 'LayoutLM \
                 --test_only False \
@@ -20,3 +20,13 @@ We put the results on google drive. You can download these result by using the f
                 > train_funsd.out
 ~~~
 
+## Evaluation
+~~~bash
+python main.py  --data_root './data_loading/funsd' \
+                --dataset 'funsd' \
+                --model 'LayoutLM \
+                --test_only True \
+                --val_batch_size 1 \
+                --gpu_id 0 \
+                > test_funsd.out
+~~~
