@@ -375,7 +375,7 @@ def convert_examples_to_features(
 
 # training example
 
-image = Image.open("/FUNSD/train/images/0000971160.png")
+image = Image.open("./FUNSD/train/images/0000971160.png")
 image = image.convert("RGB")
 plt.figure('funsd')
 plt.imshow(image)
