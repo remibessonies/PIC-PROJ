@@ -12,7 +12,7 @@ def get_labels(path):
     return labels
 
 
-def train(model, device, train_dataloader, eval_dataloader,optimizer,num_labels):
+def train(model, device, train_dataloader, eval_dataloader,optimizer,labels):
     model.to(device)
     global_step = 0
     num_train_epochs = 5
