@@ -14,8 +14,8 @@ os.chdir("/output/working/unilm/layoutlm/deprecated/examples/seq_labeling")
 ! rm -rf /kaggle/working/dataset/cached*
 
 ! python run_seq_labeling.py \
-                            --data_dir /kaggle/working/dataset \
-                            --labels /kaggle/working/dataset/labels.txt \
+                            --data_dir /output/working/dataset \
+                            --labels /output/working/dataset/labels.txt \
                             --model_name_or_path "{pretrained_model_folder}" \
                             --model_type layoutlm \
                             --max_seq_length 512 \
