@@ -419,7 +419,7 @@ def get_labels(path):
         labels = ["O"] + labels
     return labels
 
-labels = get_labels("./data/labels.txt")
+labels = get_labels("../output/dataset/labels.txt")
 num_labels = len(labels)
 label_map = {i: label for i, label in enumerate(labels)}
 
