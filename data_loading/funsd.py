@@ -375,14 +375,14 @@ def convert_examples_to_features(
 
 # training example
 
-image = Image.open("./data/training_data/images/0000971160.png")
+image = Image.open("/FUNSD/train/images/0000971160.png")
 image = image.convert("RGB")
 plt.figure('funsd')
 plt.imshow(image)
 # plt.show()
 
 # test annotation
-with open('./data/training_data/annotations/0000971160.json') as f:
+with open('./FUNSD/train/annotations/0000971160.json') as f:
   data = json.load(f)
 
 for annotation in data['form']:
