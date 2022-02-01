@@ -2,7 +2,7 @@ from transformers import LayoutLMForTokenClassification
 import torch
 from transformers import AdamW
 from tqdm import tqdm
-from datasets.funsd import train_dataloader,eval_dataloader
+from dataloading.funsd import train_dataloader,eval_dataloader
 
 def get_labels(path):
     with open(path, "r") as f:
