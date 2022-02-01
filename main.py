@@ -85,7 +85,8 @@ def main():
         evaluate(model=model, device=device, train_dataloader=train_dataloader, eval_dataloader=eval_dataloader)
         return
     else:
-        train(model=model, device=device, train_dataloader=train_dataloader, eval_dataloader=eval_dataloader,optimizer=optimizer)
+        train(model=model, device=device, train_dataloader=train_dataloader, eval_dataloader=eval_dataloader,optimizer=optimizer, labels)
+        print()
         return
 
 if __name__ == '__main__':
