@@ -1,21 +1,21 @@
 pretrained_model_folder_input= sroie_folder_path / Path('layoutlm-base-uncased') # Define it so we can copy it into our working directory
 
-pretrained_model_folder=Path('/output/working/layoutlm-base-uncased/') 
+pretrained_model_folder=Path('/output/layoutlm-base-uncased/') 
 label_file=Path(dataset_directory, "labels.txt")
 
 # Move to the script directory
-os.chdir("/output/working/unilm/layoutlm/deprecated/examples/seq_labeling")
+os.chdir("/output/unilm/layoutlm/deprecated/examples/seq_labeling")
 
 ! cp -r "{pretrained_model_folder_input}" "{pretrained_model_folder}"
 ! sed -i 's/"num_attention_heads": 16,/"num_attention_heads": 12,/' "{pretrained_model_folder}/"config.json
 
-! cat "/output/working/layoutlm-base-uncased/config.json"
+! cat "/output/layoutlm-base-uncased/config.json"
 
-! rm -rf /kaggle/working/dataset/cached*
+! rm -rf /output/dataset/cached*
 
 ! python run_seq_labeling.py \
-                            --data_dir /output/working/dataset \
-                            --labels /output/working/dataset/labels.txt \
+                            --data_dir /output/dataset \
+                            --labels /output/dataset/labels.txt \
                             --model_name_or_path "{pretrained_model_folder}" \
                             --model_type layoutlm \
                             --max_seq_length 512 \
