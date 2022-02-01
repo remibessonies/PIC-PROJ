@@ -1,30 +1,51 @@
-pretrained_model_folder_input= sroie_folder_path / Path('layoutlm-base-uncased') # Define it so we can copy it into our working directory
+from transformers import LayoutLMForTokenClassification
+import torch
+from transformers import AdamW
+from tqdm import tqdm
+from datasets.funsd import train_dataloader,eval_dataloader
 
-pretrained_model_folder=Path('/output/layoutlm-base-uncased/') 
-label_file=Path(dataset_directory, "labels.txt")
+def get_labels(path):
+    with open(path, "r") as f:
+        labels = f.read().splitlines()
+    if "O" not in labels:
+        labels = ["O"] + labels
+    return labels
 
-# Move to the script directory
-os.chdir("/output/unilm/layoutlm/deprecated/examples/seq_labeling")
 
-! cp -r "{pretrained_model_folder_input}" "{pretrained_model_folder}"
-! sed -i 's/"num_attention_heads": 16,/"num_attention_heads": 12,/' "{pretrained_model_folder}/"config.json
+def train(model, device, train_dataloader, eval_dataloader,optimizer,num_labels):
+    model.to(device)
+    global_step = 0
+    num_train_epochs = 5
+    t_total = len(train_dataloader) * num_train_epochs # total number of training steps
 
-! cat "/output/layoutlm-base-uncased/config.json"
+    #put the model in training mode
+    model.train()
+    for epoch in range(num_train_epochs):
+      for batch in tqdm(train_dataloader, desc="Training"):
+          input_ids = batch[0].to(device)
+          bbox = batch[4].to(device)
+          attention_mask = batch[1].to(device)
+          token_type_ids = batch[2].to(device)
+          labels = batch[3].to(device)
 
-! rm -rf /output/dataset/cached*
+          # forward pass
+          outputs = model(input_ids=input_ids, bbox=bbox, attention_mask=attention_mask, token_type_ids=token_type_ids,
+                          labels=labels)
+          loss = outputs.loss
 
-! python run_seq_labeling.py \
-                            --data_dir /output/dataset \
-                            --labels /output/dataset/labels.txt \
-                            --model_name_or_path "{pretrained_model_folder}" \
-                            --model_type layoutlm \
-                            --max_seq_length 512 \
-                            --do_lower_case \
-                            --do_train \
-                            --num_train_epochs 10 \
-                            --logging_steps 50 \
-                            --save_steps -1 \
-                            --output_dir output \
-                            --overwrite_output_dir \
-                            --per_gpu_train_batch_size 8 \
-                            --per_gpu_eval_batch_size 16
+          # print loss every 100 steps
+          if global_step % 100 == 0:
+            print(f"Loss after {global_step} steps: {loss.item()}")
+
+          # backward pass to get the gradients
+          loss.backward()
+
+          #print("Gradients on classification head:")
+          #print(model.classifier.weight.grad[6,:].sum())
+
+          # update
+          optimizer.step()
+          optimizer.zero_grad()
+          global_step += 1
+
+    return global_step, loss / global_step
