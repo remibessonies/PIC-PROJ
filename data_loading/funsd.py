@@ -99,7 +99,7 @@ def get_labels(path):
         labels = ["O"] + labels
     return labels
 
-labels = get_labels("../output/dataset/labels.txt")
+labels = get_labels("./data_loading/FUNSD/label.txt")
 num_labels = len(labels)
 label_map = {i: label for i, label in enumerate(labels)}
 
@@ -110,7 +110,7 @@ pad_token_label_id = CrossEntropyLoss().ignore_index
 # Create a PyTorch dataset and corresponding dataloader
 args = {'local_rank': -1,
         'overwrite_cache': True,
-        'data_dir': './data',
+        'data_dir': './data_loading/FUNSD',
         'model_name_or_path':'microsoft/layoutlm-base-uncased',
         'max_seq_length': 512,
         'model_type': 'layoutlm',}
