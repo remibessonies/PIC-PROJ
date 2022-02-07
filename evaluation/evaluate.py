@@ -1,7 +1,7 @@
 import numpy as np
 from transformers import LayoutLMForTokenClassification
 import torch
-from dataloading.funsd import eval_dataloader
+from data_loading.funsd import eval_dataloader
 import tqdm
 from torch.nn import CrossEntropyLoss
 
