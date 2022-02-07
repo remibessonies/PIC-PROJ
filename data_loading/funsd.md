@@ -1,3 +1,0 @@
-Dans le fichier *funsd.py*, d'abord, jusqu'à la ligne 90, on crée une class *FunsdDataset*, qui hérite la class *Dataset* de *torch.utils.data*. Ensuite, on l'utilise pour créer les datasets for training et evaluation, ces datasets sont de type torch. Et on les transforme aussi aux dataloaders.
-
-En train de créer *FunsdDataset*, on utilise 2 functions, qui sont écrites dans *read_txt_utils.py*. La première est pour lire les fichier txt de datasets et extraire les examples, la deuxième est pour convertir les examples aux features pour que torch peuvent les utiliser pour créer un dataset.
