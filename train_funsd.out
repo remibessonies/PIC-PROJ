@@ -1,0 +1,13 @@
+75
+26
+<torch.utils.data.dataloader.DataLoader object at 0x7f18d5ccdc70>
+Device: cuda
+Loss after 0 steps: 2.682255506515503
+Loss after 100 steps: 0.6438095569610596
+Loss after 200 steps: 0.7862253189086914
+Loss after 300 steps: 1.5076909065246582
+Loss after 400 steps: 0.18111425638198853
+Loss after 500 steps: 0.1122777909040451
+Loss after 600 steps: 0.0825919583439827
+Loss after 700 steps: 0.05002106353640556
+the globel step is 750 and the loss is 4.421226549311541e-05

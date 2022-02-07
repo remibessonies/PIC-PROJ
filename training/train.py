@@ -12,10 +12,10 @@ def get_labels(path):
     return labels
 
 
-def train(model, device, train_dataloader, eval_dataloader,optimizer,labels):
+def train(model, device, train_dataloader, eval_dataloader,optimizer,labels,num_train_epochs):
     model.to(device)
     global_step = 0
-    num_train_epochs = 5
+    num_train_epochs = num_train_epochs
     t_total = len(train_dataloader) * num_train_epochs # total number of training steps
 
     #put the model in training mode

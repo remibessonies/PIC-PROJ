@@ -85,7 +85,7 @@ def main():
         evaluate(model=model, device=device, eval_dataloader=eval_dataloader,labels=labels)
         return
     else:
-        globel_step, loss = train(model=model, device=device, train_dataloader=train_dataloader, eval_dataloader=eval_dataloader,optimizer=optimizer, labels=labels)
+        globel_step, loss = train(model=model, device=device, train_dataloader=train_dataloader, eval_dataloader=eval_dataloader,optimizer=optimizer, labels=labels, num_train_epochs=opts.num_train_epochs)
         print('the globel step is {} and the loss is {}'.format(globel_step,loss))
         return
 
