@@ -7,8 +7,8 @@ from data_loading.funsd import train_dataloader,eval_dataloader
 import os
 import numpy as np
 import random
-from .traning.train import train
-from .evaluation.evaluate import evaluate
+from training.train import train
+from evaluation.evaluate import evaluate
 
 import argparse
 
@@ -17,7 +17,7 @@ def get_argparser():
     parser = argparse.ArgumentParser()
 
     # Datset Options
-    parser.add_argument("--data_root", type=str, default='./data_loading/SROIE',
+    parser.add_argument("--data_root", type=str, default='./data_loading/FUNSD',
                         help="path to Dataset")
     parser.add_argument("--dataset", type=str, default='funsd',
                         choices=['funsd', 'sroie'], help='Name of dataset')
