@@ -19,7 +19,7 @@ def metrics(y_true, y):
 
         Args:
             y_true (list): true sequences.
-            y_pred (list): predicted sequences.
+            y (list): predicted sequences.
 
         Returns:
             results: precision score, recall and f1 score.
