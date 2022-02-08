@@ -4,6 +4,7 @@ import torch
 from transformers import AdamW
 from tqdm import tqdm
 from data_loading.funsd import train_dataloader,eval_dataloader
+from data_loading.sroie import dataloader_test_sroie, dataloader_train_sroie
 import os
 import numpy as np
 import random
