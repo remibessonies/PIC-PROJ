@@ -49,3 +49,9 @@ class SROIE(Dataset):
             if k not in ["token_list", "token_word_map"]
         }
         # fmt: on
+       
+#train_dataset = SROIE(...)       
+#train_dataloader_sroie = DataLoader(train_dataset)
+
+#test_dataset = SROIE(...)       
+#test_dataloader_sroie = DataLoader(test_dataset)
