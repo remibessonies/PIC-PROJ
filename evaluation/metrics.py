@@ -15,6 +15,15 @@ from seqeval.metrics import (
 
 
 def metrics(y_true, y):
+    """Calculate precision score, recall and f1 score.
+
+        Args:
+            y_true (list): true sequences.
+            y_pred (list): predicted sequences.
+
+        Returns:
+            results: precision score, recall and f1 score.
+        """
     results = {
         "precision": precision_score(y_true, y),
         "recall": recall_score(y_true, y),
