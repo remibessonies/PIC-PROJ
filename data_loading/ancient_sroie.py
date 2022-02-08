@@ -9,7 +9,6 @@ from torch.utils.data import DataLoader
 class SROIE(Dataset):
     def __init__(
         self,
-        run,
         data_path,
         config,
         transform,
@@ -18,12 +17,6 @@ class SROIE(Dataset):
         if self.data_path.exists() and self.data_path.is_dir():
             shutil.rmtree(self.data_path)
         self.data_path.mkdir(exist_ok=True)
-        artifact = run.use_artifact(
-            f"{run.entity}/{run.project}/{data_path}:latest",
-            type="dataset",
-        )
-        artifact.download(
-            root=str(Path.cwd()),
         )
         self.filenames_list = [fp.name for fp in self.data_path.glob("*.json")]
         if config["n_samples"] is not None:
@@ -53,14 +46,12 @@ class SROIE(Dataset):
         # fmt: on
  
 dataset_train = SROIE(
-        run=run,
         data_path=config["data_path"],
         config=config,
         transform=transform,
     )
 
 dataset_test = SROIE(
-        run=run,
         data_path=config["data_path"],
         config=config,
         transform=transform,
