@@ -3,9 +3,9 @@ from transformers import LayoutLMForTokenClassification
 import torch
 from transformers import AdamW
 from tqdm import tqdm
-# from data_loading.utils import dataloader_train, dataloader_test
-from data_loading.funsd import train_dataloader,eval_dataloader
-from data_loading.sroie import dataloader_test_sroie, dataloader_train_sroie
+from data_loading.utils import dataloader_train, dataloader_test
+#from data_loading.funsd import train_dataloader,eval_dataloader
+#from data_loading.sroie import dataloader_test_sroie, dataloader_train_sroie
 import os
 import numpy as np
 import random
@@ -86,12 +86,12 @@ def main():
     if opts.test_only:
         model.load_state_dict(torch.load('./checkpoint_LayoutLMF_funsd.pth'))
         print('load checkpoint')
-        # print(len(eval_dataloader))
+        # print(len(dataloader_test))
         # exit()
-        evaluate(model=model, device=device, eval_dataloader=eval_dataloader,labels=labels)
+        evaluate(model=model, device=device, eval_dataloader=dataloader_test(opts.dataset),labels=labels)
         return
     else:
-        globel_step, loss = train(model=model, device=device, train_dataloader=train_dataloader, eval_dataloader=eval_dataloader,optimizer=optimizer, labels=labels, num_train_epochs=opts.num_train_epochs)
+        globel_step, loss = train(model=model, device=device, train_dataloader=dataloader_train(opts.dataset), eval_dataloader=dataloader_test(opts.dataset),optimizer=optimizer, labels=labels, num_train_epochs=opts.num_train_epochs)
         print('the globel step is {} and the loss is {}'.format(globel_step,loss))
         return
 
