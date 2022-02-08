@@ -3,6 +3,7 @@ from transformers import LayoutLMForTokenClassification
 import torch
 from transformers import AdamW
 from tqdm import tqdm
+# from data_loading.utils import dataloader_train, dataloader_test
 from data_loading.funsd import train_dataloader,eval_dataloader
 from data_loading.sroie import dataloader_test_sroie, dataloader_train_sroie
 import os
