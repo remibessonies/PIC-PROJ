@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 import shutil
 from torch.utils.data import Dataset
-
+from torch.utils.data import DataLoader
 
 class SROIE(Dataset):
     def __init__(
@@ -49,7 +49,34 @@ class SROIE(Dataset):
             if k not in ["token_list", "token_word_map"]
         }
         # fmt: on
-       
+ 
+dataset_train = SROIE(
+        run=run,
+        data_path=config["data_path"],
+        config=config,
+        transform=transform,
+    )
+
+dataset_test = SROIE(
+        run=run,
+        data_path=config["data_path"],
+        config=config,
+        transform=transform,
+    )
+
+dataloader_train_sroie = DataLoader(
+        dataset_train,
+        shuffle=True,
+        batch_size=config["batch_size_train"],
+        drop_last=False,
+    )
+
+dataloader_test_sroie = DataLoader(
+        dataset_test,
+        shuffle=True,
+        batch_size=config["batch_size_test"],
+        drop_last=False,
+    )       
 #train_dataset = SROIE(...)       
 #train_dataloader_sroie = DataLoader(train_dataset)
 
