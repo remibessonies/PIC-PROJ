@@ -9,7 +9,11 @@ from torch.utils.data import DataLoader
 config = {
     "tokenizer_name": "microsoft/layoutlm-base-uncased",
     "model_name": "microsoft/layoutlm-base-uncased",
-    "data_path": "PIC-PROJ/data_loading/SROIE/",
+    "data_path_train": "PIC-PROJ/data_loading/SROIE/train",
+    "data_path_test": "PIC-PROJ/data_loading/SROIE/test",
+    "batch_size_train" : 16,
+    "batch_size_test" : 1,
+    "n_samples": None,
 }
 
 
@@ -53,13 +57,13 @@ class SROIE(Dataset):
         # fmt: on
  
 dataset_train = SROIE(
-        data_path=config["data_path"],
+        data_path=config["data_path_train"],
         config=config,
         transform=transform,
     )
 
 dataset_test = SROIE(
-        data_path=config["data_path"],
+        data_path=config["data_path_test"],
         config=config,
         transform=transform,
     )
