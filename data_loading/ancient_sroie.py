@@ -22,7 +22,6 @@ class SROIE(Dataset):
         self,
         data_path,
         config,
-        transform,
     ):
         self.data_path = Path.cwd() / data_path
         if self.data_path.exists() and self.data_path.is_dir():
@@ -32,7 +31,6 @@ class SROIE(Dataset):
         self.filenames_list = [fp.name for fp in self.data_path.glob("*.json")]
         if config["n_samples"] is not None:
             self.filenames_list = self.filenames_list[: config["n_samples"]]
-        self.transform = transform
 
     def __len__(self):
         return len(self.filenames_list)
@@ -43,10 +41,9 @@ class SROIE(Dataset):
         if local_data_path.is_file():
             with local_data_path.open("r") as f:
                 data = json.load(fp=f)
+        output=data
 
-        output = self.transform(
-            data=data,
-        )
+ 
         # fmt: off
         return {
             k: v
@@ -59,13 +56,11 @@ class SROIE(Dataset):
 dataset_train = SROIE(
         data_path=config["data_path_train"],
         config=config,
-        transform=transform,
     )
 
 dataset_test = SROIE(
         data_path=config["data_path_test"],
         config=config,
-        transform=transform,
     )
 
 dataloader_train_sroie = DataLoader(
