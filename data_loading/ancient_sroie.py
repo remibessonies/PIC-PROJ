@@ -6,6 +6,13 @@ from torch.utils.data import DataLoader
 
 
 
+config = {
+    "tokenizer_name": "microsoft/layoutlm-base-uncased",
+    "model_name": "microsoft/layoutlm-base-uncased",
+    "data_path": "PIC-PROJ/data_loading/SROIE/",
+}
+
+
 class SROIE(Dataset):
     def __init__(
         self,
