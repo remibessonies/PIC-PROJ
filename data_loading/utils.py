@@ -1,16 +1,16 @@
-from sroie.py import sroie_dataloader_train, sroie_dataloader_test
-from funsd.py import funsd_dataloader_train, funsd_dataloader_test
+from sroie.py import dataloader_train_sroie, dataloader_test_sroie
+from funsd.py import train_dataloader, eval_dataloader
 
 def dataloader_train(Dataset):
   if Dataset=='SROIE':
-    return(sroie_dataloader_train)
+    return(dataloader_train_sroie)
   elif Dataset=='FUNSD':
-    return(funsd_dataloader_train)
+    return(train_dataloader)
   
 def dataloader_test(Dataset):
   if Dataset=='SROIE':
-    return(sroie_dataloader_test)
+    return(dataloader_test_sroie)
   elif Dataset=='FUNSD':
-    return(funsd_dataloader_test)
+    return(eval_dataloader)
   
 
