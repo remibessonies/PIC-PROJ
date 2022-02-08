@@ -48,4 +48,7 @@ def train(model, device, train_dataloader, eval_dataloader,optimizer,labels,num_
           optimizer.zero_grad()
           global_step += 1
 
+    torch.save(model.state_dict(), './checkpoint_LayoutLMF_funsd.pth')
+
+
     return global_step, loss / global_step

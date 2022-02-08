@@ -1,9 +1,9 @@
 import numpy as np
 from transformers import LayoutLMForTokenClassification
 import torch
-from dataloading.funsd import eval_dataloader
-import tqdm
 from torch.nn import CrossEntropyLoss
+from tqdm import tqdm
+from data_loading.funsd import eval_dataloader,pad_token_label_id
 
 from seqeval.metrics import (
     classification_report,
@@ -20,7 +20,10 @@ def evaluate(model, device, eval_dataloader,labels):
     model.to(device)
     # put model in evaluation mode
     model.eval()
+    # print(len(eval_dataloader))
+    # exit()
     for batch in tqdm(eval_dataloader, desc="Evaluating"):
+    # for batch in eval_dataloader:
         with torch.no_grad():
             input_ids = batch[0].to(device)
             bbox = batch[4].to(device)
@@ -56,6 +59,8 @@ def evaluate(model, device, eval_dataloader,labels):
     preds_list = [[] for _ in range(out_label_ids.shape[0])]
     label_map = {i: label for i, label in enumerate(labels)}
     pad_token_label_id = CrossEntropyLoss().ignore_index
+    print(pad_token_label_id)
+    exit()
 
     for i in range(out_label_ids.shape[0]):
         for j in range(out_label_ids.shape[1]):
