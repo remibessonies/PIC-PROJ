@@ -3,7 +3,7 @@ from transformers import LayoutLMForTokenClassification
 import torch
 from torch.nn import CrossEntropyLoss
 from tqdm import tqdm
-from data_loading.funsd import eval_dataloader,pad_token_label_id
+from data_loading.funsd import eval_dataloader,pad_token_label_id,label_map
 
 from seqeval.metrics import (
     classification_report,
@@ -57,14 +57,16 @@ def evaluate(model, device, eval_dataloader,labels):
 
     out_label_list = [[] for _ in range(out_label_ids.shape[0])]
     preds_list = [[] for _ in range(out_label_ids.shape[0])]
-    label_map = {i: label for i, label in enumerate(labels)}
+    # label_map = {i: label for i, label in enumerate(labels)}
     pad_token_label_id = CrossEntropyLoss().ignore_index
     print(pad_token_label_id)
-    exit()
+    print(label_map)
+    # exit()
 
     for i in range(out_label_ids.shape[0]):
         for j in range(out_label_ids.shape[1]):
             if out_label_ids[i, j] != pad_token_label_id:
+                print(label_map[out_label_ids[i][j]])
                 out_label_list[i].append(label_map[out_label_ids[i][j]])
                 preds_list[i].append(label_map[preds[i][j]])
 

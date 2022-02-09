@@ -3,8 +3,13 @@ from transformers import LayoutLMForTokenClassification
 import torch
 from transformers import AdamW
 from tqdm import tqdm
+<<<<<<< HEAD
+# from data_loading.utils import dataloader_train, dataloader_test
+from data_loading.funsd import train_dataloader,eval_dataloader
+=======
 from data_loading.utils import dataloader_train, dataloader_test
 #from data_loading.funsd import train_dataloader,eval_dataloader
+>>>>>>> 13d3e2d670999d9a25169db2bbc883a356b9515f
 #from data_loading.sroie import dataloader_test_sroie, dataloader_train_sroie
 import os
 import numpy as np

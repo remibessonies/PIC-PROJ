@@ -1,6 +1,6 @@
 75
 26
-<torch.utils.data.dataloader.DataLoader object at 0x7f60d8122400>
+<torch.utils.data.dataloader.DataLoader object at 0x7f564c0da400>
 Device: cuda
 Loss after 0 steps: 2.682255506515503
 Loss after 100 steps: 0.6438095569610596
