@@ -1,4 +1,6 @@
+from pickle import FALSE
 from transformers import LayoutLMForTokenClassification
+from transformers import LayoutLMv2ForTokenClassification
 import torch
 from transformers import AdamW
 from tqdm import tqdm
@@ -18,7 +20,7 @@ def get_argparser():
                         choices=['funsd', 'sroie'], help='Name of dataset')
     # Models Options
     parser.add_argument("--model", type=str, default='LayoutLM',
-                        choices=['LayoutLM', 'LayoutLM'], help='model name')
+                        choices=['LayoutLM', 'LayoutLMv2'], help='model name')
     # Train Options
     parser.add_argument("--test_only", action='store_true', default=False)
     parser.add_argument("--save_val_results", action='store_true', default=False,
@@ -49,7 +51,7 @@ def main():
     random.seed(opts.random_seed)
     # define number of labels refer to different dataset
     if opts.dataset.lower() == 'funsd':
-        from data_loading.funsd import train_dataloader, eval_dataloader
+        from data_loading.funsd import train_dataloader, eval_dataloader,val_dataloader
         def get_labels(path):
             with open(path, "r") as f:
                 labels = f.read().splitlines()
@@ -59,7 +61,7 @@ def main():
         labels = get_labels(os.path.join(opts.data_root,"labels.txt"))
         num_labels = len(labels)
     else:
-        from data_loading.funsd_sroie import train_dataloader, eval_dataloader
+        from data_loading.funsd_sroie import train_dataloader, eval_dataloader,val_dataloader
         def get_labels(path):
             with open(path, "r") as f:
                 labels = f.read().splitlines()
@@ -72,19 +74,20 @@ def main():
     # define model
     if opts.model == 'LayoutLM':
         model = LayoutLMForTokenClassification.from_pretrained("microsoft/layoutlm-base-uncased", num_labels=num_labels)
+        version_v2 = False
     else:
-        pass
+        model = LayoutLMv2ForTokenClassification.from_pretrained("microsoft/layoutlmv2-base-uncased", num_labels=num_labels)
+        version_v2 = True
     model.to(device)
     # define optimization
     optimizer = AdamW(model.parameters(), lr=opts.lr)
     if opts.test_only:
-        model.load_state_dict(torch.load('./checkpoint_LayoutLMF_funsd.pth'))
-        results = evaluate(model=model, device=device, eval_dataloader=eval_dataloader,labels=labels)
+        model.load_state_dict(torch.load('./checkpoint_LayoutLMF_best.pth'))
+        results = evaluate(model=model, device=device, eval_dataloader=eval_dataloader,labels=labels,save_result=True,version_v2=version_v2)
         print(results)
         return
     else:
-        print('test')
-        globel_step, loss = train(model=model, device=device, train_dataloader=train_dataloader, eval_dataloader=eval_dataloader,optimizer=optimizer, labels=labels,num_train_epochs = opts.num_train_epochs)
+        globel_step, loss = train(model=model, device=device, train_dataloader=train_dataloader, val_dataloader=val_dataloader, optimizer=optimizer, labels=labels,num_train_epochs = opts.num_train_epochs,version_v2=version_v2)
         print('the globel step is {} and the loss is {}'.format(globel_step,loss))
         return
 if __name__ == '__main__':

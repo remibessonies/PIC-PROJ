@@ -4,6 +4,7 @@ import torch
 from torch.nn import CrossEntropyLoss
 from tqdm import tqdm
 from data_loading.funsd import eval_dataloader,pad_token_label_id,label_map
+#from data_loading.funsd_sroie import eval_dataloader,pad_token_label_id,label_map
 
 from seqeval.metrics import (
     classification_report,
@@ -12,7 +13,7 @@ from seqeval.metrics import (
     recall_score,
 )
 
-def evaluate(model, device, eval_dataloader,labels):
+def evaluate(model, device, eval_dataloader,labels,save_result=False,version_v2=False):
     eval_loss = 0.0
     nb_eval_steps = 0
     preds = None
@@ -30,10 +31,18 @@ def evaluate(model, device, eval_dataloader,labels):
             attention_mask = batch[1].to(device)
             token_type_ids = batch[2].to(device)
             labels = batch[3].to(device)
+            if version_v2 == True:
+              imgs = batch[5].to(device)
 
             # forward pass
-            outputs = model(input_ids=input_ids, bbox=bbox, attention_mask=attention_mask, token_type_ids=token_type_ids,
-                            labels=labels)
+            if version_v2:
+              outputs = model(image=imgs,input_ids=input_ids, bbox=bbox, attention_mask=attention_mask, token_type_ids=token_type_ids,
+                              labels=labels)
+            else:
+              outputs = model(input_ids=input_ids, bbox=bbox, attention_mask=attention_mask, token_type_ids=token_type_ids,
+                              labels=labels)
+            if save_result:
+                pass
             # get the loss and logits
             tmp_eval_loss = outputs.loss
             logits = outputs.logits
@@ -76,6 +85,19 @@ def evaluate(model, device, eval_dataloader,labels):
         "recall": recall_score(out_label_list, preds_list),
         "f1": f1_score(out_label_list, preds_list),
     }
-
+    if save_result:
+        with open("./predictions.txt", "w") as f:
+            with open("./data_loading/FUNSD/test.txt", "r") as f1:
+            # with open("./data_loading/SROIE/test.txt", "r") as f1:
+                example_id = 0
+                for line in f1:
+                    if line.startswith("-DOCSTART-") or line == "" or line == "\n":
+                        print(line)
+                        f.write(line)
+                        if not preds_list[example_id]:
+                            example_id += 1
+                    elif preds_list[example_id]:
+                        output_line = (line.split()[0] + " " + preds_list[example_id].pop(0) + "\n")
+                        f.write(output_line)
     # print(results)
     return results

@@ -10,6 +10,7 @@ import logging
 import os
 import random
 import torch
+from torchvision import transforms
 
 def read_examples_from_file(data_dir, mode):
     file_path = os.path.join(data_dir, "{}.txt".format(mode))
@@ -38,6 +39,7 @@ def read_examples_from_file(data_dir, mode):
                             actual_bboxes=actual_bboxes,
                             file_name=file_name,
                             page_size=page_size,
+                            mode = mode,
                         )
                     )
                     guid_index += 1
@@ -74,6 +76,7 @@ def read_examples_from_file(data_dir, mode):
                     actual_bboxes=actual_bboxes,
                     file_name=file_name,
                     page_size=page_size,
+                    mode = mode,
                 )
             )
     return examples
@@ -160,6 +163,7 @@ def convert_examples_to_features(
         segment_ids += [pad_token_segment_id] * padding_length
         label_ids += [pad_token_label_id] * padding_length
         token_boxes += [pad_token_box] * padding_length
+        #images = [Image.open(path).convert("RGB") for path in examples['image_path']]
 
         if ex_index < 5:
             logger.info("*** Example ***")
@@ -172,6 +176,20 @@ def convert_examples_to_features(
             logger.info("boxes: %s", " ".join([str(x) for x in token_boxes]))
             logger.info("actual_bboxes: %s", " ".join([str(x) for x in actual_bboxes]))
 
+        transform_ = transforms.Compose([
+          transforms.Resize([224,224]),
+          transforms.ToTensor(),])
+    
+        if example.mode == "train":
+          path = os.path.join('/content/PIC_BNP_PROJET/data_loading/FUNSD/training_data/images',example.file_name)
+        else:
+          path = os.path.join('/content/PIC_BNP_PROJET/data_loading/FUNSD/testing_data/images',example.file_name)
+        
+        # print('page_size',page_size)
+        img = Image.open(path).convert("RGB")
+        img = transform_(img)
+        # print('img size',img.size())
+
         features.append(
             InputFeatures(
                 input_ids=input_ids,
@@ -182,6 +200,7 @@ def convert_examples_to_features(
                 actual_bboxes=actual_bboxes,
                 file_name=file_name,
                 page_size=page_size,
+                img = img,
             )
         )
     return features
@@ -190,7 +209,7 @@ def convert_examples_to_features(
 class InputExample(object):
     """A single training/test example for token classification."""
 
-    def __init__(self, guid, words, labels, boxes, actual_bboxes, file_name, page_size):
+    def __init__(self, guid, words, labels, boxes, actual_bboxes, file_name, page_size,mode):
         self.guid = guid
         self.words = words
         self.labels = labels
@@ -198,7 +217,7 @@ class InputExample(object):
         self.actual_bboxes = actual_bboxes
         self.file_name = file_name
         self.page_size = page_size
-
+        self.mode = mode
 
 class InputFeatures(object):
     def __init__(
@@ -211,6 +230,7 @@ class InputFeatures(object):
         actual_bboxes,
         file_name,
         page_size,
+        img,
     ):
         assert (
             0 <= all(boxes) <= 1000
@@ -225,4 +245,5 @@ class InputFeatures(object):
         self.actual_bboxes = actual_bboxes
         self.file_name = file_name
         self.page_size = page_size
+        self.img = img
 
