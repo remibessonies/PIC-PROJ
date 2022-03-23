@@ -181,9 +181,9 @@ def convert_examples_to_features(
           transforms.ToTensor(),])
     
         if example.mode == "train":
-          path = os.path.join('/content/PIC_BNP_PROJET/data_loading/FUNSD/training_data/images',example.file_name)
+          path = os.path.join('/content/PIC_BNP_PROJET_2/data_loading/SROIE/train/img',example.file_name)+".jpg"
         else:
-          path = os.path.join('/content/PIC_BNP_PROJET/data_loading/FUNSD/testing_data/images',example.file_name)
+          path = os.path.join('/content/PIC_BNP_PROJET_2/data_loading/SROIE/test/img',example.file_name)+".jpg"
         
         # print('page_size',page_size)
         img = Image.open(path).convert("RGB")

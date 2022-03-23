@@ -35,9 +35,11 @@ class FunsdDataset(Dataset):
                 str(args.max_seq_length),
             ),
         )
-        if os.path.exists(cached_features_file) and not args.overwrite_cache:
-            logger.info("Loading features from cached file %s", cached_features_file)
-            features = torch.load(cached_features_file)
+        # if os.path.exists(cached_features_file) and not args.overwrite_cache:
+        #     logger.info("Loading features from cached file %s", cached_features_file)
+        #     features = torch.load(cached_features_file)
+        if False:
+            pass
         else:
             logger.info("Creating features from dataset file at %s", args.data_dir)
             examples = read_examples_from_file(args.data_dir, mode)
@@ -80,6 +82,7 @@ class FunsdDataset(Dataset):
             [f.label_ids for f in features], dtype=torch.long
         )
         self.all_bboxes = torch.tensor([f.boxes for f in features], dtype=torch.long)
+        self.all_imgs = [f.img for f in features]
 
     def __len__(self):
         return len(self.features)
@@ -96,6 +99,8 @@ class FunsdDataset(Dataset):
             self.all_segment_ids[index],
             self.all_label_ids[index],
             self.all_bboxes[index],
+            # for layout lm v2
+            self.all_imgs[index],
         )
 
 
@@ -109,7 +114,7 @@ def get_labels(path):
         labels = ["O"] + labels
     return labels
 
-labels = get_labels("/content/PIC_BNP_PROJET/data_loading/SROIE/labels.txt")
+labels = get_labels("/content/PIC_BNP_PROJET_2/data_loading/SROIE/labels.txt")
 num_labels = len(labels)
 label_map = {i: label for i, label in enumerate(labels)}
 
@@ -120,7 +125,7 @@ pad_token_label_id = CrossEntropyLoss().ignore_index
     # Create a PyTorch dataset and corresponding dataloader
 args = {'local_rank': -1,
         'overwrite_cache': True,
-        'data_dir': '/content/PIC_BNP_PROJET/data_loading/SROIE',
+        'data_dir': '/content/PIC_BNP_PROJET_2/data_loading/SROIE',
         'model_name_or_path':'microsoft/layoutlm-base-uncased',
         'max_seq_length': 512,
         'model_type': 'layoutlm',}
@@ -156,7 +161,7 @@ train_dataset, val_dataset = random_split(
 train_sampler = RandomSampler(train_dataset)
 train_dataloader = DataLoader(train_dataset,
                               sampler=train_sampler,
-                              batch_size=2)
+                              batch_size=4)
 
 val_sampler = RandomSampler(val_dataset)
 val_dataloader = DataLoader(val_dataset,

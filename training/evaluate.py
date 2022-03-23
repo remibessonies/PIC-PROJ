@@ -3,7 +3,7 @@ from transformers import LayoutLMForTokenClassification
 import torch
 from torch.nn import CrossEntropyLoss
 from tqdm import tqdm
-from data_loading.funsd import eval_dataloader,pad_token_label_id,label_map
+from data_loading.funsd_sroie import eval_dataloader,pad_token_label_id,label_map
 #from data_loading.funsd_sroie import eval_dataloader,pad_token_label_id,label_map
 
 from seqeval.metrics import (
@@ -87,7 +87,7 @@ def evaluate(model, device, eval_dataloader,labels,save_result=False,version_v2=
     }
     if save_result:
         with open("./predictions.txt", "w") as f:
-            with open("./data_loading/FUNSD/test.txt", "r") as f1:
+            with open("./data_loading/SROIE/test.txt", "r") as f1:
             # with open("./data_loading/SROIE/test.txt", "r") as f1:
                 example_id = 0
                 for line in f1:

@@ -3,7 +3,7 @@ from transformers import LayoutLMForTokenClassification
 import torch
 from transformers import AdamW
 from tqdm import tqdm
-from data_loading.funsd import train_dataloader,eval_dataloader
+from data_loading.funsd_sroie import train_dataloader,eval_dataloader
 from .evaluate import evaluate
 from torch.utils.tensorboard import SummaryWriter
 import os
